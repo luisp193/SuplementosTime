@@ -314,5 +314,5 @@ object Catalog {
         ),
     )
 
-    val all: List<Supplement> by lazy { core + CatalogMore.items }
+    val all: List<Supplement> by lazy { core + CatalogMore.items + CatalogExtra.items + CatalogAminos.items + CatalogPlants.items }
 }

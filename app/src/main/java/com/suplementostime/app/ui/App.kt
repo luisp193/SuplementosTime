@@ -20,6 +20,7 @@ import androidx.compose.material.icons.filled.Clear
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalUriHandler
@@ -31,6 +32,12 @@ import com.suplementostime.app.data.*
 
 @Composable
 fun App(context: Context) {
+    var splash by rememberSaveable { mutableStateOf(true) }
+    if (splash) SplashScreen { splash = false } else MainContent(context)
+}
+
+@Composable
+private fun MainContent(context: Context) {
     var tab by remember { mutableIntStateOf(0) }
     var selected by remember { mutableStateOf<Supplement?>(null) }
     BackHandler(enabled = selected != null) { selected = null }
@@ -76,11 +83,15 @@ fun SearchScreen(onOpen: (Supplement) -> Unit) {
         LazyColumn(contentPadding = PaddingValues(16.dp), verticalArrangement = Arrangement.spacedBy(8.dp)) {
             items(results, key = { it.id }) { s ->
                 Card(Modifier.fillMaxWidth().clickable { onOpen(s) }) {
-                    Column(Modifier.padding(14.dp)) {
-                        Text(s.name, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
-                        Text(s.category, color = MaterialTheme.colorScheme.secondary, fontSize = 12.sp)
-                        Spacer(Modifier.height(4.dp))
-                        Text(s.summary, fontSize = 14.sp)
+                    Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+                        SupplementImage(s, Modifier.size(64.dp), corner = 12.dp)
+                        Spacer(Modifier.width(12.dp))
+                        Column(Modifier.weight(1f)) {
+                            Text(s.name, fontWeight = FontWeight.SemiBold, fontSize = 17.sp)
+                            Text(s.category, color = MaterialTheme.colorScheme.secondary, fontSize = 12.sp)
+                            Spacer(Modifier.height(4.dp))
+                            Text(s.summary, fontSize = 14.sp)
+                        }
                     }
                 }
             }
@@ -103,9 +114,25 @@ fun DetailScreen(s: Supplement, onBack: () -> Unit) {
         TopAppBar(title = { Text(s.name) },
             navigationIcon = { IconButton(onBack) { Icon(Icons.AutoMirrored.Filled.ArrowBack, "Volver") } })
         Column(Modifier.verticalScroll(rememberScrollState()).padding(16.dp)) {
+            SupplementImage(s, Modifier.fillMaxWidth().height(220.dp), corner = 20.dp)
+            Text(s.category, color = MaterialTheme.colorScheme.secondary, fontSize = 13.sp,
+                modifier = Modifier.padding(top = 10.dp, bottom = 4.dp))
             Text(s.summary, fontSize = 16.sp)
+            SportDoses.of(s)?.let { sport ->
+                Card(
+                    Modifier.fillMaxWidth().padding(top = 16.dp),
+                    colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.primaryContainer),
+                ) {
+                    Column(Modifier.padding(14.dp)) {
+                        Text("🏆 Dosis para deportistas de alto rendimiento", fontWeight = FontWeight.Bold, fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onPrimaryContainer)
+                        Spacer(Modifier.height(6.dp))
+                        Text(sport, color = MaterialTheme.colorScheme.onPrimaryContainer)
+                    }
+                }
+            }
             Section("Propiedades", s.properties)
-            Section("Cantidad diaria", listOf(s.dose))
+            Section("Cantidad diaria general y límites", listOf(s.dose))
             Section("Cómo tomarlo", s.howToTake)
             Section("Cuándo", listOf(s.timing))
             Section("Precauciones", s.cautions)
