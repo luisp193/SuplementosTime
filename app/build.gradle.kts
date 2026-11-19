@@ -12,8 +12,10 @@ android {
         applicationId = "com.suplementostime.app"
         minSdk = 24
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.1.1"
+        // Para sacar una versión nueva solo hay que subir este número (V5, V6...).
+        // El APK sale con el nombre SuplementosTime_V<versionCode>.apk
+        versionCode = 4
+        versionName = "V4"
     }
     // Clave fija: así cada APK compilado en GitHub tiene la misma firma y se puede actualizar encima.
     signingConfigs {
