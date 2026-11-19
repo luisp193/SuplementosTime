@@ -12,10 +12,11 @@ android {
         applicationId = "com.suplementostime.app"
         minSdk = 24
         targetSdk = 34
-        // Para sacar una versión nueva solo hay que subir este número (V5, V6...).
-        // El APK sale con el nombre SuplementosTime_V<versionCode>.apk
-        versionCode = 5
-        versionName = "V5"
+        // El número de versión es el nº de compilación de GitHub Actions (#7 -> V7), que llega con -PappVersion=7.
+        // En local, sin ese parámetro, se usa el valor de respaldo. El APK sale como SuplementosTime_V<n>.apk
+        val appVersion = (project.findProperty("appVersion") as String?)?.toIntOrNull() ?: 5
+        versionCode = appVersion
+        versionName = "V$appVersion"
     }
     // Clave fija: así cada APK compilado en GitHub tiene la misma firma y se puede actualizar encima.
     signingConfigs {

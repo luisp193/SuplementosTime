@@ -18,11 +18,11 @@ jobs:
         with:
           gradle-version: 8.9
       - name: Tests y APK debug
-        run: gradle --no-daemon testDebugUnitTest assembleDebug
+        run: gradle --no-daemon -PappVersion=${{ github.run_number }} testDebugUnitTest assembleDebug
       - name: Nombrar APK como SuplementosTime_Vx
         id: ver
         run: |
-          N=$(grep -oP 'versionCode\s*=\s*\K[0-9]+' app/build.gradle.kts)
+          N=${{ github.run_number }}
           mkdir -p dist
           cp app/build/outputs/apk/debug/*.apk "dist/SuplementosTime_V${N}.apk"
           echo "name=SuplementosTime_V${N}" >> "$GITHUB_OUTPUT"
