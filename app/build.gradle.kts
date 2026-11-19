@@ -14,8 +14,8 @@ android {
         targetSdk = 34
         // Para sacar una versión nueva solo hay que subir este número (V5, V6...).
         // El APK sale con el nombre SuplementosTime_V<versionCode>.apk
-        versionCode = 4
-        versionName = "V4"
+        versionCode = 5
+        versionName = "V5"
     }
     // Clave fija: así cada APK compilado en GitHub tiene la misma firma y se puede actualizar encima.
     signingConfigs {

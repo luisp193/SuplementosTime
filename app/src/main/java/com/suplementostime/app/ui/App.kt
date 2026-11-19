@@ -49,6 +49,8 @@ private fun MainContent(context: Context) {
                     icon = { Icon(Icons.Default.Search, null) }, label = { Text("Suplementos") })
                 NavigationBarItem(selected = tab == 1, onClick = { tab = 1 },
                     icon = { Text("⚖", fontSize = 20.sp) }, label = { Text("Comparar") })
+                NavigationBarItem(selected = tab == 2, onClick = { tab = 2 },
+                    icon = { Text("📊", fontSize = 20.sp) }, label = { Text("Referencias") })
             }
         },
     ) { pad ->
@@ -57,6 +59,7 @@ private fun MainContent(context: Context) {
             when {
                 s != null -> DetailScreen(s) { selected = null }
                 tab == 0 -> SearchScreen { selected = it }
+                tab == 2 -> ReferenceScreen()
                 else -> CompareScreen(context)
             }
         }
